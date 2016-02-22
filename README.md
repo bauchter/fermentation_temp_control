@@ -1,4 +1,4 @@
-# Cloud-connected Fermentation Temperature Controller
+# Cloud-Connected Fermentation Temperature Controller (from IoT to ABV)
 Particle Firmware for controlling an active, four setting thermal wrap for homebrew fermentation
 
 # Problem Space:
