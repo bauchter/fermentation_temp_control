@@ -1,2 +1,18 @@
-# fermentation_temp_control
+# Cloud-connected Fermentation Temperature Controller
 Particle Firmware for controlling an active, four setting thermal wrap for homebrew fermentation
+
+# Problem Space:
+Living in the USA within an area that has basements, the basement area I'm homebrewing in gets quite cold throughout the winter - and it stays below target fermentation temperature throughout the summer.  When fermenting a homebrew, temperature conrol is desirable due to the swings that can happen within the space - either from the building's thermostat or from other temperature swings throughout a day.  This quick solution was used to provide a near constant temperature for the yeasty brew to continue fermenting regardless of temperature dips and keep the brew out of the way of foot traffic. 
+
+# Hardware
+The hardware used is a Spark/Particle Wi-Fi dev kit (from their original kickstarter), a 60ohm thermistor with resistor divider, a 5V electromechanical relay (with swingback diode), and a hacked Walgreens special four setting thermal blanket that happens to have an approximate 2 hour auto-shutoff (thermal settings: off, low, medium, and high).  
+
+# Modifications and Design Description
+The hack was simply to solder the relay across the pushbutton of the thermal blanket (which was wrapped around most of the fermenter), so that any pulse to the relay would approximate the function of a pushbutton.  Activation of this relay was possible using the 3.3V output of a digital output (in this case, D6 of the Particle module).  The relay voltage tolerances were sufficient, and the drive strength to switch was 20mA across the relay (within the 25mA limit of digital output).  
+
+For temperature sensing, the thermistor was pulled out of a parts bin, but similar cheap thermistors can be found on adafruit's site or any.  In this case, three 22 ohm resistors were added in a series voltage divider with the thermistor between 3.3VDC and GND.  The input between resistor divider and the thermistor was tied to an analog input (A0), which has a 12-bit range, 0-4095.  The thermistor was taped against the side of the fermentation tank, and a separate thermocouple temp sensor was placed next to it for calibration.  A thermochromic thermometer scale adhered to the tank was also used as a reference.  The tank with sugary wort was heated past the interested setpoint, and then left to drop in temperature - thereby allowing a manual ADC-to-Actual Sensed Temperature calibration.  The desired setpoint was coded as an ADC value, then the heater activation code was added (with about 15 minute re-evaluation cycle).  
+
+The added .html file is a way to manually intervene on the temperature remotely from a smart phone.  The 2-hour shutoff provides a safety mechanism to shut off the heater if it gets out of switching sequence.  A separate query can be placed into a smart phone to keep tabs on the ADC readout (perhaps could add this to the single .html file).  
+
+# Features and Improvements
+There are plenty of possible feature improvements, including improvements to the thermal control loop algorithm, better looking remote control .html, possible alert functions, integration to something like IFTTT, etc.  This was all whipped up while doing laundry, and it does the job, keeping the beer within 0.5 deg. F of the setpoint with the current coldness level of the basement.  Modifications may be necessary into the summer, and also for when this particular beer is transitioned to an oak barrel for relative long term aging (~1-2 years).  It may be much harder to sense temperature fluctuations through a barrel wall, thus requiring an inserted probe.  TBD.
